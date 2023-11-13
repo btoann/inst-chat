@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import ThemeSwitcher from '@/components/shared/ThemeSwitcher'
 import { UserButton } from '@clerk/nextjs'
 
 const Home = () => {
@@ -7,11 +7,10 @@ const Home = () => {
       <p className={'text-3xl font-bold text-indigo-500'}>
         Hello world!
       </p>
-      <Button variant={'default'}>
-        <UserButton
-          afterSignOutUrl={'/'}
-        />
-      </Button>
+      <UserButton
+        afterSignOutUrl={'/'}
+      />
+      <ThemeSwitcher />
     </div>
   )
 }

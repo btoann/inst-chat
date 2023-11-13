@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { Open_Sans } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
+import ThemeProvider from '@/components/provider/theme-provider'
+import { cn } from '@/lib/utils'
 
 const font = Open_Sans({ subsets: ['latin'] })
 
@@ -18,9 +20,24 @@ interface IRootLayoutProps {
 const RootLayout: FC<IRootLayoutProps> = ({ children }) => {
   return (
     <ClerkProvider>
-      <html lang={'en'}>
-        <body className={font.className}>
-          {children}
+      <html
+        lang={'en'}
+        suppressHydrationWarning
+      >
+        <body
+          className={cn(
+            font.className,
+            'bg-white dark:bg-[#313338]'
+          )}
+        >
+          <ThemeProvider
+            attribute={'class'}
+            defaultTheme={'dark'}
+            enableSystem={false}
+            storageKey={'c-appchat-theme'}
+          >
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
