@@ -3,8 +3,9 @@ import type { Metadata } from 'next'
 import { Open_Sans } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
-import ThemeProvider from '@/components/provider/theme-provider'
 import { cn } from '@/lib/utils'
+import ThemeProvider from '@/components/provider/ThemeProvider'
+import ModalProvider from '@/components/provider/ModalProvider'
 
 const font = Open_Sans({ subsets: ['latin'] })
 
@@ -36,6 +37,7 @@ const RootLayout: FC<IRootLayoutProps> = ({ children }) => {
             enableSystem={false}
             storageKey={'c-appchat-theme'}
           >
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </body>
