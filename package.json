@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "vc --cwd build --prod --confirm --token=uRiPrCyuOQKjGjjtIfCFOZO7"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
@@ -48,6 +49,7 @@
     "postcss": "^8",
     "prisma": "^5.5.2",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^32.5.4"
   }
 }
