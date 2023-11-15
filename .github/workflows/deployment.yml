@@ -1,0 +1,38 @@
+name: Clonecord action
+on: [push]
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      DEPLOY_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      DEPLOY_PROJ_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 21
+      - name: Install node_modules
+        run: yarn
+      - name: Install Vercel CLI
+        run: yarn add --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=$DEPLOY_TOKEN
+      - name: Build the project
+        run: vercel build --prod --yes --token=$DEPLOY_TOKEN
+      # - name: Sets the vercel env
+      #   run: |
+      #     cd build
+      #     mkdir .vercel
+      #     cd .vercel
+      #     touch project.json
+      #     echo "{\"orgId\":\"$DEPLOY_ORG_ID\",\"projectId\":\"$DEPLOY_PROJ_ID\"}" > project.json
+      - name: Rewrites config of vercel
+        run: |
+          cd build
+          touch vercel.json
+          echo '{"rewrites":[{"source":"/(.*)","destination":"/"}]}' > vercel.json
+      - name: Deloying the project
+        run: vercel deploy --prebuilt --prod --token=$DEPLOY_TOKEN
+      - name: Setup finish
+        run: echo 'Built successfully!'
