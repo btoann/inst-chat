@@ -23,7 +23,7 @@ jobs:
         run: |
           cd build
           touch vercel.json
-          echo '{"rewrites":[{"source":"/(.*)","destination":"/"}]}' > vercel.json
+          echo '{"framework":"nextjs","rewrites":[{"source":"/(.*)","destination":"/"}]}' > vercel.json
       - name: Deloying the project
         # env:
         #   VERCEL_ORG_ID: kz5QwzncukdCAe9U18OEnU8G
