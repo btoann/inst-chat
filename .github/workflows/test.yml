@@ -8,4 +8,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 21
-      - run: node -v
+      - name: Install node_modules
+        run: yarn
+      - name: Build the project
+        run: yarn build
+      - name: Setup finish
+        run: echo 'Built successfully!'
