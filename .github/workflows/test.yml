@@ -1,0 +1,8 @@
+name: Clonecord action
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'testing 1'
+      - run: echo 'testing 2'
