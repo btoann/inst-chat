@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "vc --cwd build --prod --confirm --token=uRiPrCyuOQKjGjjtIfCFOZO7"
+    "deploy": "vc --cwd build --prod --yes --token=uRiPrCyuOQKjGjjtIfCFOZO7"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
