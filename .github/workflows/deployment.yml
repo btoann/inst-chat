@@ -14,12 +14,12 @@ jobs:
           node-version: 21
       - name: Install node_modules
         run: yarn
-      - name: Install Vercel CLI
-        run: yarn add --global vercel@latest
+      # - name: Install Vercel CLI
+      #   run: yarn add --global vercel@latest
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=$DEPLOY_TOKEN
+        run: yarn vercel pull --yes --environment=production --token=$DEPLOY_TOKEN
       - name: Build the project
-        run: vercel build --prod --yes --token=$DEPLOY_TOKEN
+        run: yarn vercel build --prod --yes --token=$DEPLOY_TOKEN
       # - name: Sets the vercel env
       #   run: |
       #     cd build
@@ -33,6 +33,6 @@ jobs:
           touch vercel.json
           echo '{"rewrites":[{"source":"/(.*)","destination":"/"}]}' > vercel.json
       - name: Deloying the project
-        run: vercel deploy --prebuilt --prod --token=$DEPLOY_TOKEN
+        run: yarn vercel deploy --prebuilt --prod --token=$DEPLOY_TOKEN
       - name: Setup finish
         run: echo 'Built successfully!'
