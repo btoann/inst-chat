@@ -1,8 +1,8 @@
 name: Clonecord action
 on: [push]
 jobs:
-  test:
+  build-app:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'testing 1'
-      - run: echo 'testing 2'
+      - uses: actions/checkout@v2
+      - run: tree
