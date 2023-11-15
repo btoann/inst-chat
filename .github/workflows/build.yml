@@ -28,6 +28,6 @@ jobs:
         # env:
         #   VERCEL_ORG_ID: kz5QwzncukdCAe9U18OEnU8G
         #   VERCEL_PROJECT_ID: prj_5g88J7TXjrPbchDW6ztdzpc3oQnR
-        run: yarn deloy
+        run: yarn deploy
       - name: Setup finish
         run: echo 'Built successfully!'
