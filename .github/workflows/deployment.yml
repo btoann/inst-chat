@@ -7,6 +7,7 @@ jobs:
       DEPLOY_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DEPLOY_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       DEPLOY_PROJ_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      BUILT_DIR: dist
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -29,7 +30,7 @@ jobs:
       #     echo "{\"orgId\":\"$DEPLOY_ORG_ID\",\"projectId\":\"$DEPLOY_PROJ_ID\"}" > project.json
       - name: Rewrites config of vercel
         run: |
-          cd build
+          cd $BUILT_DIR
           touch vercel.json
           echo '{"rewrites":[{"source":"/(.*)","destination":"/"}]}' > vercel.json
       - name: Deloying the project
