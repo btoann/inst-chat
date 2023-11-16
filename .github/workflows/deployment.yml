@@ -3,6 +3,8 @@ on: [push]
 jobs:
   build-app:
     runs-on: ubuntu-latest
+    outputs:
+      text: ${{ steps.finished.outputs.text }}
     env:
       DEPLOY_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DEPLOY_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -15,19 +17,10 @@ jobs:
           node-version: 21
       - name: Install node_modules
         run: yarn
-      # - name: Install Vercel CLI
-      #   run: yarn add --global vercel@latest
       - name: Pull Vercel Environment Information
         run: yarn vercel pull --yes --environment=production --token=$DEPLOY_TOKEN
       - name: Build the project
         run: yarn vercel build --prod --yes --token=$DEPLOY_TOKEN
-      # - name: Sets the vercel env
-      #   run: |
-      #     cd build
-      #     mkdir .vercel
-      #     cd .vercel
-      #     touch project.json
-      #     echo "{\"orgId\":\"$DEPLOY_ORG_ID\",\"projectId\":\"$DEPLOY_PROJ_ID\"}" > project.json
       - name: Rewrites config of vercel
         run: |
           cd $BUILT_DIR
@@ -36,4 +29,12 @@ jobs:
       - name: Deloying the project
         run: yarn vercel deploy --prebuilt --prod --token=$DEPLOY_TOKEN
       - name: Setup finish
-        run: echo 'Built successfully!'
+        id: finished
+        run: echo "::set-output name=text::built-app"
+  test-app:
+    needs: build-app
+    runs-on: ubuntu-latest
+    env:
+      BUILT_JOB_OUTPUT: ${{ needs.build-app.outputs.text }}
+    steps:
+      - run: echo "Testing $BUILT_JOB_OUTPUT"
