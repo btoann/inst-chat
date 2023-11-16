@@ -4,15 +4,15 @@ jobs:
   build-app:
     runs-on: ubuntu-latest
     outputs:
-      text: ${{ steps.finished.outputs.text }}
+      built: ${{ steps.finished.outputs.built }}
     env:
       DEPLOY_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       DEPLOY_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       DEPLOY_PROJ_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       BUILT_DIR: dist
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 21
       - name: Install node_modules
@@ -30,11 +30,11 @@ jobs:
         run: yarn vercel deploy --prebuilt --prod --token=$DEPLOY_TOKEN
       - name: Setup finish
         id: finished
-        run: echo "::set-output name=text::built-app"
+        run: echo "built=built-app" >> $GITHUB_OUTPUT
   test-app:
     needs: build-app
     runs-on: ubuntu-latest
     env:
-      BUILT_JOB_OUTPUT: ${{ needs.build-app.outputs.text }}
+      BUILT_JOB_OUTPUT: ${{ needs.build-app.outputs.built }}
     steps:
       - run: echo "Testing $BUILT_JOB_OUTPUT"
