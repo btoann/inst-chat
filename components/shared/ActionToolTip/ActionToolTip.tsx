@@ -5,14 +5,14 @@ import {
   Tooltip, TooltipContent, TooltipProvider, TooltipTrigger
 } from '@/components/ui/tooltip'
 
-interface IActionToolTipProps {
+type TActionToolTipProps = {
   label: string
   side?: 'top' | 'right' | 'bottom' | 'left'
   align?: 'start' | 'center' | 'end'
   children: ReactNode
 }
 
-const ActionToolTip: FC<IActionToolTipProps> = ({ label, side, align, children }) => {
+const ActionToolTip: FC<TActionToolTipProps> = ({ label, side, align, children }) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>

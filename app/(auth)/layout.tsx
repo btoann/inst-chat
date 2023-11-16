@@ -1,10 +1,10 @@
 import { FC, ReactNode } from 'react'
 
-interface IAuthLayoutProps {
+type TAuthLayoutProps = {
   children: ReactNode
 }
 
-const AuthLayout: FC<IAuthLayoutProps> = ({ children }) => {
+const AuthLayout: FC<TAuthLayoutProps> = ({ children }) => {
   return (
     <div className={'h-full flex items-center justify-center'}>
       {children}

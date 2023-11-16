@@ -6,13 +6,13 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import ActionToolTip from '@/components/shared/ActionToolTip'
 
-interface ISideBarItemProps {
+type TSideBarItemProps = {
   id: string
   name: string
   imageUrl: string
 }
 
-const SideBarItem: FC<ISideBarItemProps> = ({ id, name, imageUrl }) => {
+const SideBarItem: FC<TSideBarItemProps> = ({ id, name, imageUrl }) => {
 
   const params = useParams()
   const router = useRouter()
@@ -45,7 +45,9 @@ const SideBarItem: FC<ISideBarItemProps> = ({ id, name, imageUrl }) => {
           )}
         >
           <Image
+            priority
             fill
+            sizes={'sm'}
             src={imageUrl}
             alt={name}
             className={'object-cover'}

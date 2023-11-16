@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CreateServerModal } from '@/components/shared/Modal'
+import { CreateServerModal, EditServerModal, InviteModal, MembersModal } from '@/components/shared/Modal'
 
 const ModalProvider = ({}) => {
 
@@ -16,6 +16,9 @@ const ModalProvider = ({}) => {
   return (
     <>
       <CreateServerModal />
+      <EditServerModal />
+      <InviteModal />
+      <MembersModal />
     </>
   )
 }

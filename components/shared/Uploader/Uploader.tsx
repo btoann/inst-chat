@@ -6,13 +6,13 @@ import Image from 'next/image'
 import { UploadDropzone } from '@/lib/uploadthing'
 import '@uploadthing/react/styles.css'
 
-interface IUploaderProps {
+type TUploaderProps = {
   endpoint: 'messageFile' | 'serverImage'
   value: string
   onChange: (url?: string) => void
 }
 
-const Uploader: FC<IUploaderProps> = ({ endpoint, value, onChange }) => {
+const Uploader: FC<TUploaderProps> = ({ endpoint, value, onChange }) => {
 
   const fileType = value?.split('.').pop()
 

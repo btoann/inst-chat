@@ -3,16 +3,16 @@ import { redirect } from 'next/navigation'
 import { redirectToSignIn } from '@clerk/nextjs'
 import { db } from '@/lib/db'
 import { currentProfile } from '@/lib/current-profile'
-import { ServerSideBar } from '@/components/shared/SideBar'
+import ServerBar from '@/components/shared/ServerBar'
 
-interface IServerIdLayoutProps {
+type TServerIdLayoutProps = {
   params: {
     serverId: string
   }
   children: ReactNode
 }
 
-const ServerIdLayout: FC<IServerIdLayoutProps> = async ({ children, params }) => {
+const ServerIdLayout: FC<TServerIdLayoutProps> = async ({ children, params }) => {
 
   const profile = await currentProfile()
 
@@ -34,7 +34,7 @@ const ServerIdLayout: FC<IServerIdLayoutProps> = async ({ children, params }) =>
   return (
     <div className={'h-full'}>
       <div className={'hidden md:flex flex-col h-full w-60 fixed inset-y-0 z-20'}>
-        <ServerSideBar serverId={params.serverId} />
+        <ServerBar serverId={params.serverId} />
       </div>
 
       <main className={'h-full md:pl-60'}>
