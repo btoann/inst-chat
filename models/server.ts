@@ -1,7 +1,6 @@
-import { Server, Member, Profile } from '@prisma/client'
+import { Server } from '@prisma/client'
+import { IMember } from './member'
 
 export interface IServer extends Server {
-  members: (Member & {
-    profile: Profile
-  })[]
+  members: IMember[]
 }

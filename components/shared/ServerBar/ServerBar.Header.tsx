@@ -32,7 +32,7 @@ const ServerBarHeader: FC<TServerBarHeaderProps> = ({
         className={'focus:outline-none'}
       >
         <button
-          className={'flex items-center h-12 w-full px-3 text-md font-semibold border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition'}
+          className={'h-12 w-full px-3 flex items-center text-md font-semibold border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition'}
         >
           {server.name}
           <ChevronDown className={'h-5 w-5 ml-auto'} />
@@ -67,7 +67,10 @@ const ServerBarHeader: FC<TServerBarHeaderProps> = ({
           </DropdownMenuItem>
         )}
         {isModerator && (
-          <DropdownMenuItem className={'px-3 py-2 text-sm cursor-pointer'}>
+          <DropdownMenuItem
+            className={'px-3 py-2 text-sm cursor-pointer'}
+            onClick={() => onOpen('createChannel')}
+          >
             Create Channel
             <PlusCircle className={'h-4 w-4 ml-auto'} />
           </DropdownMenuItem>
@@ -76,13 +79,19 @@ const ServerBarHeader: FC<TServerBarHeaderProps> = ({
           <DropdownMenuSeparator />
         )}
         {isAdmin && (
-          <DropdownMenuItem className={'px-3 py-2 text-sm text-rose-500 cursor-pointer'}>
+          <DropdownMenuItem
+            className={'px-3 py-2 text-sm text-rose-500 cursor-pointer'}
+            onClick={() => onOpen('deleteServer', { server })}
+          >
             Delete Server
             <Trash className={'h-4 w-4 ml-auto'} />
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className={'px-3 py-2 text-sm text-rose-500 cursor-pointer'}>
+          <DropdownMenuItem
+            className={'px-3 py-2 text-sm text-rose-500 cursor-pointer'}
+            onClick={() => onOpen('leaveServer', { server })}
+          >
             Leave Server
             <LogOut className={'h-4 w-4 ml-auto'} />
           </DropdownMenuItem>
