@@ -5,8 +5,10 @@ import { useParams, useRouter } from 'next/navigation'
 import {
   Hash, Mic, Video, Edit, Trash, Lock
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { Channel, Server, MemberRole, ChannelType } from '@prisma/client'
+import { GV } from '@/config/glob'
+import { cn } from '@/lib/utils'
+import useModal, { ModalType } from '@/hooks/ModalStore'
 import ActionToolTip from '@/components/shared/ActionToolTip'
 
 type TServerBarChannelProps = {
@@ -27,8 +29,18 @@ const ServerBarChannel: FC<TServerBarChannelProps> = ({
 
   const params = useParams()
   const router = useRouter()
+  const { onOpen } = useModal()
 
   const Icon = iconMap[channel.type]
+
+  const handleVisitChannel = () => {
+    router.push(`/servers/${params?.serverId}/channels/${channel.id}`)
+  }
+
+  const handlePerformAction = (e: React.MouseEvent, action: ModalType) => {
+    e.stopPropagation()
+    onOpen(action, { server, channel })
+  }
 
   return (
     <button
@@ -36,7 +48,7 @@ const ServerBarChannel: FC<TServerBarChannelProps> = ({
         'group w-full px-2 py-2 mb-1 flex items-center gap-x-2 rounded-md hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition',
         params?.channelId === channel.id && 'bg-zinc-700/20 dark:bg-zinc-700'
       )}
-      onClick={() => {}}
+      onClick={() => handleVisitChannel()}
     >
       <Icon className={'h-5 w-5 flex-shrink-0 text-zinc-500 dark:text-zinc-400'} />
       <p className={cn(
@@ -45,17 +57,23 @@ const ServerBarChannel: FC<TServerBarChannelProps> = ({
       )}>
         {channel.name}
       </p>
-      {channel.name !== 'general' && role !== MemberRole.GUEST && (
+      {channel.name !== GV.DEFAULT_CHANNEL && role !== MemberRole.GUEST && (
         <div className={'ml-auto flex items-center gap-x-2'}>
           <ActionToolTip label={'Edit'}>
-            <Edit className={'h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zince-400 dark:hover:text-zinc-300 transition'} />
+            <Edit
+              className={'h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zince-400 dark:hover:text-zinc-300 transition'}
+              onClick={e => handlePerformAction(e, 'editChannel')}
+            />
           </ActionToolTip>
           <ActionToolTip label={'Delete'}>
-            <Trash className={'h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zince-400 dark:hover:text-zinc-300 transition'} />
+            <Trash
+              className={'h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zince-400 dark:hover:text-zinc-300 transition'}
+              onClick={e => handlePerformAction(e, 'deleteChannel')}
+            />
           </ActionToolTip>
         </div>
       )}
-      {channel.name === 'general' && (
+      {channel.name === GV.DEFAULT_CHANNEL && (
         <Lock className={'h-4 w-4 ml-auto text-zinc-500 dark:text-zinc-400'} />
       )}
     </button>

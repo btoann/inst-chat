@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import {
   CreateServerModal, EditServerModal, DeleteServerModal, LeaveServerModal, InviteModal,
-  MembersModal, CreateChannelModal,
+  MembersModal, CreateChannelModal, EditChannelModal, DeleteChannelModal,
 } from '@/components/shared/Modal'
 
 const ModalProvider = ({}) => {
@@ -25,6 +25,8 @@ const ModalProvider = ({}) => {
       <LeaveServerModal />
       <MembersModal />
       <CreateChannelModal />
+      <EditChannelModal />
+      <DeleteChannelModal />
     </>
   )
 }

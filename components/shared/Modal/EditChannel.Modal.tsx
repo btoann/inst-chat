@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import axios from 'axios'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,20 +29,19 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 })
 
-const CreateChannelModal = ({}) => {
+const EditChannelModal = ({}) => {
 
   const { type, isOpen, onClose, data } = useModal()
   const router = useRouter()
-  const params = useParams()
 
-  const isModalOpen = isOpen && type === 'createChannel'
-  const { channelType } = data
+  const isModalOpen = isOpen && type === 'editChannel'
+  const { server, channel } = data
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     }
   })
 
@@ -51,12 +50,12 @@ const CreateChannelModal = ({}) => {
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url: '/api/channels/',
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId
+          serverId: server?.id
         }
       })
-      await axios.post(url, data)
+      await axios.patch(url, data)
       form.reset()
       router.refresh()
       onClose()
@@ -72,12 +71,11 @@ const CreateChannelModal = ({}) => {
   }
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue('type', channelType)
-      return
+    if (channel) {
+      form.setValue('name', channel.name)
+      form.setValue('type', channel.type)
     }
-    form.setValue('type', ChannelType.TEXT)
-  }, [ channelType, form ])
+  }, [ form, channel ])
 
   return (
     <Dialog
@@ -87,7 +85,7 @@ const CreateChannelModal = ({}) => {
       <DialogContent className={'bg-white text-black p-0 overflow-hidden'}>
         <DialogHeader className={'pt-8 px-6'}>
           <DialogTitle className={'text-2xl text-center font-bold'}>
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
 
@@ -157,7 +155,7 @@ const CreateChannelModal = ({}) => {
                 variant={'primary'}
                 disabled={isLoading}
               >
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>
@@ -167,4 +165,4 @@ const CreateChannelModal = ({}) => {
   )
 }
 
-export default CreateChannelModal
+export default EditChannelModal

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
+import { GV } from '@/config/glob'
 import { MemberRole } from '@prisma/client'
 
 const POST = async (
@@ -17,7 +18,7 @@ const POST = async (
 
     if (!serverId) return new NextResponse('Server ID missing', { status: 400 })
 
-    if (name === 'general') return new NextResponse(`Name cannot be 'general'`, { status: 400 })
+    if (name === GV.DEFAULT_CHANNEL) return new NextResponse(`Name cannot be '${GV.DEFAULT_CHANNEL}'`, { status: 400 })
 
     const server = await db.server.update({
       where: {

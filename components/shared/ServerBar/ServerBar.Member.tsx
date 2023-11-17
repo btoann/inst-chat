@@ -30,12 +30,17 @@ const ServerBarMember: FC<TServerBarMemberProps> = ({
 
   const icon = roleIconMap[member.role]
 
+  const handleMakeConversation = () => {
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`)
+  }
+
   return (
     <button
       className={cn(
         'group w-full px-2 py-2 mb-1 flex items-center gap-x-2 rounded-md hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition',
         params?.memberId === member.id && 'bg-zinc-700/20 dark:bg-zinc-700'
       )}
+      onClick={() => handleMakeConversation()}
     >
       <UserAvatar
         src={member.profile.imageUrl}
