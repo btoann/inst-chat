@@ -42,6 +42,29 @@ const ChannelIdPage: FC<TChannlIdPageProps> = async ({
         serverId={channel.serverId}
         type={'channel'}
       />
+      <Conversation.Messages
+        type={'channel'}
+        name={channel.name}
+        chatId={channel.id}
+        member={memeber}
+        apiUrl={'/api/messages'}
+        socketUrl={'/api/socket/messages'}
+        socketQuery={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+        paramKey={'channelId'}
+        paramValue={channel.id}
+      />
+      <Conversation.Input
+        type={'channel'}
+        name={channel.name}
+        apiUrl={'/api/socket/messages'}
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+      />
     </div>
   )
 }

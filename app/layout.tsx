@@ -5,7 +5,9 @@ import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import ThemeProvider from '@/components/provider/ThemeProvider'
+import SocketProvider from '@/components/provider/SocketProvider'
 import ModalProvider from '@/components/provider/ModalProvider'
+import QueryProvider from '@/components/provider/QueryProvider'
 
 const font = Open_Sans({ subsets: ['latin'] })
 
@@ -37,8 +39,12 @@ const RootLayout: FC<TRootLayoutProps> = ({ children }) => {
             enableSystem={false}
             storageKey={'c-appchat-theme'}
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              <QueryProvider>
+                {children}
+              </QueryProvider>
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>

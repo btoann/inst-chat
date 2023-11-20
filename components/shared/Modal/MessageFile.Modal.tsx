@@ -1,68 +1,66 @@
 'use client'
 
-import { useEffect } from 'react'
-import axios from 'axios'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import axios from 'axios'
+import qs from 'query-string'
+import z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useModal from '@/hooks/ModalStore'
 import {
   Dialog, DialogTitle, DialogContent, DialogDescription, DialogHeader, DialogFooter
 } from '@/components/ui/dialog'
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Uploader from '@/components/shared/Uploader'
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Server name is required.'),
-  imageUrl: z.string().min(1, 'Server image is required.'),
+  fileUrl: z.string().min(1, 'Attachment is required.'),
 })
 
-const EditServerModal = ({}) => {
+const MessageFileModal = ({}) => {
 
-  const { isOpen, onClose, type, data } = useModal()
   const router = useRouter()
+  const { isOpen, onClose, type, data } = useModal()
 
-  const isModalOpen = isOpen && type === 'editServer'
-  const { server } = data
+  const isModalOpen = isOpen && type === 'messageFile'
+  const { apiUrl, query } = data
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      imageUrl: '',
+      fileUrl: '',
     }
   })
 
   const isLoading = form.formState.isSubmitting
 
+  const handleClose = () => {
+    form.reset()
+    onClose()
+  }
+  
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/servers/${server?.id}`, data)
+      const url = qs.stringifyUrl({
+        url: apiUrl || '',
+        query: (query as any),
+      })
+      await axios.post(url, {
+        ...data,
+        content: data.fileUrl,
+      })
       form.reset()
       router.refresh()
-      onClose()
+      handleClose()
     }
     catch (err) {
       console.error(err)
     }
   }
-
-  const handleClose = () => {
-    form.reset()
-    onClose()
-  }
-
-  useEffect(() => {
-    if (server) {
-      form.setValue('name', server.name)
-      form.setValue('imageUrl', server.imageUrl)
-    }
-  }, [server, form])
 
   return (
     <Dialog
@@ -72,10 +70,10 @@ const EditServerModal = ({}) => {
       <DialogContent className={'bg-white text-black p-0 overflow-hidden'}>
         <DialogHeader className={'pt-8 px-6'}>
           <DialogTitle className={'text-2xl text-center font-bold'}>
-            Customize your server
+            Add an attachment
           </DialogTitle>
           <DialogDescription className={'text-center text-zinc-500'}>
-            Give your server a personality with a name and an image. You can always change it later.
+            Send a file as a message
           </DialogDescription>
         </DialogHeader>
 
@@ -88,12 +86,12 @@ const EditServerModal = ({}) => {
               <div className={'flex items-center justify-center text-center'}>
                 <FormField
                   control={form.control}
-                  name={'imageUrl'}
+                  name={'fileUrl'}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Uploader
-                          endpoint={'serverImage'}
+                          endpoint={'messageFile'}
                           value={field.value}
                           onChange={field.onChange}
                         />
@@ -102,34 +100,13 @@ const EditServerModal = ({}) => {
                   )}
                 />
               </div>
-
-              <FormField
-                control={form.control}
-                name={'name'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={'uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'}>
-                      Server name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={'Enter server name'}
-                        className={'bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'}
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
             <DialogFooter className={'bg-gray-100 px-6 py-4'}>
               <Button
                 variant={'primary'}
                 disabled={isLoading}
               >
-                Save changes
+                Send
               </Button>
             </DialogFooter>
           </form>
@@ -139,4 +116,4 @@ const EditServerModal = ({}) => {
   )
 }
 
-export default EditServerModal
+export default MessageFileModal

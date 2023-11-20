@@ -107,8 +107,8 @@ const CreateChannelModal = ({}) => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className={'bg-zinc-300/50 text-black border-0 focus-visible:ring-0 focus-visible:ring-offset-0'}
                         placeholder={'Enter channel name'}
+                        className={'bg-zinc-300/50 text-black border-0 focus-visible:ring-0 focus-visible:ring-offset-0'}
                         disabled={isLoading}
                         {...field}
                       />

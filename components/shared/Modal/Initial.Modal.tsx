@@ -101,8 +101,8 @@ const InitialModal = ({}) => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className={'bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'}
                         placeholder={'Enter server name'}
+                        className={'bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'}
                         disabled={isLoading}
                         {...field}
                       />

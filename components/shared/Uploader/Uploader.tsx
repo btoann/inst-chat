@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { X } from 'lucide-react'
+import { FileIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import { UploadDropzone } from '@/lib/uploadthing'
 import '@uploadthing/react/styles.css'
@@ -27,6 +27,27 @@ const Uploader: FC<TUploaderProps> = ({ endpoint, value, onChange }) => {
       <button
         type={'button'}
         className={'bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm'}
+        onClick={() => onChange('')}
+      >
+        <X className={'h-4 w-4'} />
+      </button>
+    </div>
+  )
+
+  if (value && fileType === 'pdf') return (
+    <div className={'relative p-2 mt-2 flex items-center rounded-md bg-background/10'}>
+      <FileIcon className={'h-10 w-10 fill-indigo-200 stroke-indigo-400'} />
+      <a
+        target={'_blank'}
+        href={value}
+        rel={'noopener noreferrer'}
+        className={'ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline'}
+      >
+        {value}
+      </a>
+      <button
+        type={'button'}
+        className={'bg-rose-500 text-white p-1 rounded-full absolute -top-2 -right-2 shadow-sm'}
         onClick={() => onChange('')}
       >
         <X className={'h-4 w-4'} />
