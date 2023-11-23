@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { redirectToSignIn } from '@clerk/nextjs'
 import { db } from '@/lib/db'
 import { currentProfile } from '@/lib/current-profile'
-import Conversation from '@/components/shared/Conversation'
+import Chat from '@/components/shared/Chat'
 
 type TChannlIdPageProps = {
   params: {
@@ -37,15 +37,15 @@ const ChannelIdPage: FC<TChannlIdPageProps> = async ({
 
   return (
     <div className={'h-full flex flex-col bg-white dark:bg-[#313338]'}>
-      <Conversation.Header
+      <Chat.Header
         name={channel.name}
         serverId={channel.serverId}
         type={'channel'}
       />
-      <Conversation.Messages
+      <Chat.Messages
         type={'channel'}
-        name={channel.name}
         chatId={channel.id}
+        name={channel.name}
         member={memeber}
         apiUrl={'/api/messages'}
         socketUrl={'/api/socket/messages'}
@@ -56,7 +56,7 @@ const ChannelIdPage: FC<TChannlIdPageProps> = async ({
         paramKey={'channelId'}
         paramValue={channel.id}
       />
-      <Conversation.Input
+      <Chat.Input
         type={'channel'}
         name={channel.name}
         apiUrl={'/api/socket/messages'}

@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import axios from 'axios'
+import {
+  Check, Gavel, Loader2, MoreVertical, Shield, ShieldAlert, ShieldCheck, ShieldQuestion, UserMinus
+} from 'lucide-react'
 import { MemberRole } from '@prisma/client'
+import { IconMap } from '@/config/glob'
 import useModal from '@/hooks/ModalStore'
 import { IServer } from '@/models/server'
 import {
@@ -16,15 +20,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import UserAvatar from '@/components/shared/UserAvatar'
-import {
-  Check, Gavel, Loader2, MoreVertical, Shield, ShieldAlert, ShieldCheck, ShieldQuestion, UserMinus
-} from 'lucide-react'
 
-const roleIcons = {
+const roleIcons: IconMap<MemberRole> = {
   'GUEST': null,
   'MODERATOR': <ShieldCheck className={'h-4 w-4 ml-2 text-indigo-500'} />,
   'ADMIN': <ShieldAlert className={'h-4 w-4 ml-2 text-rose-500'} />,
 }
+
 
 const MembersModal = ({}) => {
 

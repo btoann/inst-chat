@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 import { MemberRole } from '@prisma/client'
 import { GV } from '@/config/glob'
+import ServerModel from '@/models/server'
 import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
 
 const POST = async (req: Request) => {
   try {
@@ -13,7 +13,7 @@ const POST = async (req: Request) => {
     
     const { name, imageUrl } = await req.json()
 
-    const server = await db.server.create({
+    const server = await ServerModel.create({
       data: {
         profileId: profile.id,
         name,

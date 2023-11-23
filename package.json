@@ -31,9 +31,10 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "date-fns": "^2.30.0",
     "emoji-mart": "^5.5.2",
     "lucide-react": "^0.292.0",
-    "next": "14.0.2",
+    "next": "^14.0.3",
     "next-themes": "^0.2.1",
     "query-string": "^8.1.0",
     "react": "^18",
@@ -51,6 +52,7 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.8.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

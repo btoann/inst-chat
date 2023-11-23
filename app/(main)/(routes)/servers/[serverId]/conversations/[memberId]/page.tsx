@@ -1,4 +1,4 @@
-import Conversation from '@/components/shared/Conversation'
+import Conversation from '@/components/shared/Chat'
 import { getOrCreateConversation } from '@/lib/conversation'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'

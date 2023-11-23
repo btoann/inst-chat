@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { GV } from '@/config/glob'
 import { MemberRole } from '@prisma/client'
+import { GV } from '@/config/glob'
+import ServerModel from '@/models/server'
+import { currentProfile } from '@/lib/current-profile'
 
 const POST = async (
   req: Request
@@ -20,7 +20,7 @@ const POST = async (
 
     if (name === GV.DEFAULT_CHANNEL) return new NextResponse(`Name cannot be '${GV.DEFAULT_CHANNEL}'`, { status: 400 })
 
-    const server = await db.server.update({
+    const server = await ServerModel.update({
       where: {
         id: serverId,
         members: {

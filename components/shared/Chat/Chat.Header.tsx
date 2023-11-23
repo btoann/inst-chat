@@ -4,14 +4,14 @@ import MobileToggle from '@/components/shared/MobileToggle'
 import UserAvatar from '@/components/shared/UserAvatar'
 import SocketIndicator from '@/components/shared/SocketIndicator'
 
-type TConversationHeaderProps = {
+type TChatHeaderProps = {
   type: 'channel' | 'conversation'
   serverId: string
   name: string
   imageUrl?: string
 }
 
-const ConversationHeader: FC<TConversationHeaderProps> = ({
+const ChatHeader: FC<TChatHeaderProps> = ({
   type, serverId, name, imageUrl
 }) => {
   return (
@@ -36,4 +36,4 @@ const ConversationHeader: FC<TConversationHeaderProps> = ({
   )
 }
 
-export default ConversationHeader
+export default ChatHeader

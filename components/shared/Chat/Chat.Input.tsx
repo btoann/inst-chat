@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import EmojiPicker from '@/components/shared/EmojiPicker'
 
-type TConversationInputProps = {
+type TChatInputProps = {
   type: 'conversation' | 'channel'
   name: string
   apiUrl: string
@@ -26,7 +26,7 @@ const formSchema = z.object({
   content: z.string().min(1),
 })
 
-const ConversationInput: FC<TConversationInputProps> = ({
+const ChatInput: FC<TChatInputProps> = ({
   type, name, apiUrl, query
 }) => {
 
@@ -96,4 +96,4 @@ const ConversationInput: FC<TConversationInputProps> = ({
   )
 }
 
-export default ConversationInput
+export default ChatInput

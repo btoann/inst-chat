@@ -1,9 +1,10 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ShieldAlert, ShieldCheck } from 'lucide-react'
 import { MemberRole } from '@prisma/client'
+import { IconMap } from '@/config/glob'
 import { cn } from '@/lib/utils'
 import { IServer } from '@/models/server'
 import { IMember } from '@/models/member'
@@ -14,10 +15,10 @@ type TServerBarMemberProps = {
   server: IServer
 }
 
-const roleIconMap = {
-  [MemberRole.GUEST]: null,
-  [MemberRole.MODERATOR]: <ShieldCheck className={'h-4 w-4 ml-2 text-indigo-500'} />,
-  [MemberRole.ADMIN]: <ShieldAlert className={'h-4 w-4 ml-2 text-rose-500'} />,
+const roleIconMap: IconMap<MemberRole> = {
+  'GUEST': null,
+  'MODERATOR': <ShieldCheck className={'h-4 w-4 ml-2 text-indigo-500'} />,
+  'ADMIN': <ShieldAlert className={'h-4 w-4 ml-2 text-rose-500'} />,
 }
 
 

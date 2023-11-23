@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { MemberRole } from '@prisma/client'
 import { GV } from '@/config/glob'
+import ServerModel from '@/models/server'
 import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
 
 const PATCH = async (
   req: Request,
@@ -23,7 +23,7 @@ const PATCH = async (
 
     if (name === GV.DEFAULT_CHANNEL) return new NextResponse(`Name cannot be '${GV.DEFAULT_CHANNEL}'`, { status: 400 })
 
-    const server = await db.server.update({
+    const server = await ServerModel.update({
       where: {
         id: serverId,
         members: {
@@ -77,7 +77,7 @@ const DELETE = async (
     if (!serverId) return new NextResponse('Server ID missing', { status: 400 })
     if (!params.channelId) return new NextResponse('Channel ID missing', { status: 400 })
 
-    const server = await db.server.update({
+    const server = await ServerModel.update({
       where: {
         id: serverId,
         members: {

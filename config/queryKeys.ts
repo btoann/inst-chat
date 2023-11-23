@@ -19,5 +19,7 @@ export enum QUERY_KEYS {
   SEARCH_POSTS = 'getSearchPosts',
 
   // CHAT KEYS
-  GET_CHAT_BY_ID = 'getChatByI',
+  CHAT = 'chat',
+  CREATE_CHAT = 'chat:messages',
+  UPDATE_CHAT = 'chat:messages:update',
 }

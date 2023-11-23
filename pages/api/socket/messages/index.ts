@@ -1,6 +1,8 @@
 import { NextApiRequest } from 'next'
 import { NextApiResponseServerIO } from '@/config/glob'
-import { db } from '@/lib/db'
+import ServerModel from '@/models/server'
+import ChannelModel from '@/models/channel'
+import MessageModel from '@/models/message'
 import { currentProfileViaPages } from '@/lib/current-profile'
 
 const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
@@ -20,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
     if (!content) return res.status(400).json({ error: 'No content found' })
 
-    const server = await db.server.findFirst({
+    const server = await ServerModel.findFirst({
       where: {
         id: serverId as string,
         members: {
@@ -36,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
     
     if (!server) return res.status(404).json({ error: 'Server not found' })
 
-    const channel = await db.channel.findFirst({
+    const channel = await ChannelModel.findFirst({
       where: {
         id: channelId as string,
         serverId: serverId as string,
@@ -49,7 +51,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
     if (!member) return res.status(404).json({ error: 'Member not found' })
 
-    const message = await db.message.create({
+    const message = await MessageModel.create({
       data: {
         content,
         fileUrl,

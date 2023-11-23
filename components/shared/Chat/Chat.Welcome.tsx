@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { Hash } from 'lucide-react'
 
-type TConversationWelcomeProps = {
+type TChatWelcomeProps = {
   type: 'channel' | 'conversation'
   name: string
 }
 
-const ConversationWelcome: FC<TConversationWelcomeProps> = ({
+const ChatWelcome: FC<TChatWelcomeProps> = ({
   type, name
 }) => {
   return (
@@ -30,4 +30,4 @@ const ConversationWelcome: FC<TConversationWelcomeProps> = ({
   )
 }
 
-export default ConversationWelcome
+export default ChatWelcome

@@ -45,11 +45,11 @@ const SideBarItem: FC<TSideBarItemProps> = ({ id, name, imageUrl }) => {
           )}
         >
           <Image
+            src={imageUrl}
+            alt={name}
             priority
             fill
             sizes={'sm'}
-            src={imageUrl}
-            alt={name}
             className={'object-cover'}
           />
         </div>

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from 'lucide-react'
 import { currentProfile } from '@/lib/current-profile'
@@ -11,21 +11,22 @@ import ServerBarSearch from './ServerBar.Search'
 import ServerBarSection from './ServerBar.Section'
 import ServerBarChannel from './ServerBar.Channel'
 import ServerBarMember from './ServerBar.Member'
+import { IconMap } from '@/config/glob'
 
 type TServerBarProps = {
   serverId: string
 }
 
-const iconMap = {
-  [ChannelType.TEXT]: <Hash className={'h-4 w-4 mr-2'} />,
-  [ChannelType.AUDIO]: <Mic className={'h-4 w-4 mr-2'} />,
-  [ChannelType.VIDEO]: <Video className={'h-4 w-4 mr-2'} />,
+const iconMap: IconMap<ChannelType> = {
+  'TEXT': <Hash className={'h-4 w-4 mr-2'} />,
+  'AUDIO': <Mic className={'h-4 w-4 mr-2'} />,
+  'VIDEO': <Video className={'h-4 w-4 mr-2'} />,
 }
 
-const roleIconMap = {
-  [MemberRole.GUEST]: null,
-  [MemberRole.MODERATOR]: <ShieldCheck className={'h-4 w-4 mr-2 text-indigo-500'} />,
-  [MemberRole.ADMIN]: <ShieldAlert className={'h-4 w-4 mr-2 text-rose-500'} />,
+const roleIconMap: IconMap<MemberRole> = {
+  'GUEST': null,
+  'MODERATOR': <ShieldCheck className={'h-4 w-4 mr-2 text-indigo-500'} />,
+  'ADMIN': <ShieldAlert className={'h-4 w-4 mr-2 text-rose-500'} />,
 }
 
 const ServerBar: FC<TServerBarProps> = async ({ serverId }) => {

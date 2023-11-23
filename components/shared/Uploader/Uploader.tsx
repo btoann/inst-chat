@@ -19,9 +19,9 @@ const Uploader: FC<TUploaderProps> = ({ endpoint, value, onChange }) => {
   if (value && fileType !== 'pdf') return (
     <div className={'relative h-20 w-20'}>
       <Image
-        fill
         src={value}
         alt={'upload'}
+        fill
         className={'rounded-full object-cover'}
       />
       <button
@@ -38,8 +38,8 @@ const Uploader: FC<TUploaderProps> = ({ endpoint, value, onChange }) => {
     <div className={'relative p-2 mt-2 flex items-center rounded-md bg-background/10'}>
       <FileIcon className={'h-10 w-10 fill-indigo-200 stroke-indigo-400'} />
       <a
-        target={'_blank'}
         href={value}
+        target={'_blank'}
         rel={'noopener noreferrer'}
         className={'ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline'}
       >

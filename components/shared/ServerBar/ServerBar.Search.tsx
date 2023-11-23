@@ -37,15 +37,15 @@ const ServerBarSearch: FC<TServerBarSearchProps> = ({
   }
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
+    const onShortcutKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setOpen(open => !open)
       }
     }
 
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+    document.addEventListener('keydown', onShortcutKeyDown)
+    return () => document.removeEventListener('keydown', onShortcutKeyDown)
   }, [])
 
   return (
@@ -63,6 +63,7 @@ const ServerBarSearch: FC<TServerBarSearchProps> = ({
         <ShortcutSpan
           modifier={'CTRL'}
           keycode={'K'}
+          modifierClasses={'text-xs'}
         />
       </button>
       <CommandDialog

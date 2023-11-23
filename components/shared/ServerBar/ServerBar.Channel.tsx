@@ -3,7 +3,7 @@
 import { FC } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  Hash, Mic, Video, Edit, Trash, Lock
+  LucideIcon, Hash, Mic, Video, Edit, Trash, Lock
 } from 'lucide-react'
 import { Channel, Server, MemberRole, ChannelType } from '@prisma/client'
 import { GV } from '@/config/glob'
@@ -17,10 +17,10 @@ type TServerBarChannelProps = {
   role?: MemberRole
 }
 
-const iconMap = {
-  [ChannelType.TEXT]: Hash,
-  [ChannelType.AUDIO]: Mic,
-  [ChannelType.VIDEO]: Video,
+const iconMap: Record<ChannelType, LucideIcon> = {
+  'TEXT': Hash,
+  'AUDIO': Mic,
+  'VIDEO': Video,
 }
 
 const ServerBarChannel: FC<TServerBarChannelProps> = ({
