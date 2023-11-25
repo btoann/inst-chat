@@ -23,7 +23,7 @@ const ChatWelcome: FC<TChatWelcomeProps> = ({
         {
           type === 'channel'
             ? `This is the start of the #${name} channel.`
-            : `Start your conversation with #${name}`
+            : <>Start your conversation with <strong>{name}</strong></>
         }
       </p>
     </div>

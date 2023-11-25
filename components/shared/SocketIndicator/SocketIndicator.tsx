@@ -12,7 +12,8 @@ const SocketIndicator = () => {
       variant={'outline'}
       className={'border-none bg-yellow-600 text-white'}
     >
-      Fallback: Polling every 1s
+      {/* Fallback: Polling every 1s */}
+      Fallback
     </Badge>
   )
 
@@ -21,7 +22,8 @@ const SocketIndicator = () => {
       variant={'outline'}
       className={'border-none bg-emerald-600 text-white'}
     >
-      Live: Real-time updates
+      {/* Live: Real-time updates */}
+      Live
     </Badge>
   )
 }

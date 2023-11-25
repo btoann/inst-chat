@@ -1,10 +1,9 @@
 import { NextApiRequest } from 'next'
 import { MemberRole } from '@prisma/client'
-import { NextApiResponseServerIO, ChatMessagesType } from '@/config/glob'
+import { NextApiResponseServerIO } from '@/config/glob'
 import { SOCKET_CHAT_KEYS } from '@/config/socketKeys'
-import ServerModel from '@/models/server'
-import ChannelModel from '@/models/channel'
-import MessageModel from '@/models/message'
+import ConversationModel from '@/models/conversation'
+import DirectMessageModel from '@/models/directMessage'
 import { currentProfileViaPages } from '@/lib/current-profile'
 
 const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
@@ -15,44 +14,50 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
     if (!profile) return res.status(401).json({ error: 'Unauthorized' })
 
-    const { serverId, channelId, messageId } = req.query
+    const { conversationId, directMessageId } = req.query
 
-    if (!serverId) return res.status(400).json({ error: 'Server ID missing' })
-    if (!channelId) return res.status(400).json({ error: 'Channel ID missing' })
+    if (!conversationId) return res.status(400).json({ error: 'Conversation ID missing' })
 
-    const server = await ServerModel.findFirst({
+    const conversation = await ConversationModel.findFirst({
       where: {
-        id: serverId as string,
-        members: {
-          some: {
-            profileId: profile.id,
+        id: conversationId as string,
+        OR: [
+          {
+            memberOne: {
+              profileId: profile.id,
+            }
+          },
+          {
+            memberTwo: {
+              profileId: profile.id,
+            }
           }
-        }
+        ]
       },
       include: {
-        members: true,
+        memberOne: {
+          include: {
+            profile: true,
+          }
+        },
+        memberTwo: {
+          include: {
+            profile: true,
+          }
+        }
       }
     })
-    
-    if (!server) return res.status(404).json({ error: 'Server not found' })
 
-    const channel = await ChannelModel.findFirst({
-      where: {
-        id: channelId as string,
-        serverId: serverId as string,
-      }
-    })
+    if (!conversation) return res.status(404).json({ error: 'Conversation not found' })
 
-    if (!channel) return res.status(404).json({ error: 'Channel not found' })
-
-    const member = server.members.find(member => member.profileId === profile.id)
+    const member = conversation.memberOne.profileId === profile.id ? conversation.memberOne : conversation.memberTwo
 
     if (!member) return res.status(404).json({ error: 'Member not found' })
 
-    let message = await MessageModel.findFirst({
+    let directMessage = await DirectMessageModel.findFirst({
       where: {
-        id: messageId as string,
-        channelId: channel.id,
+        id: directMessageId as string,
+        conversationId: conversationId as string,
       },
       include: {
         member: {
@@ -63,9 +68,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       }
     })
     
-    if (!message || message.deleted) return res.status(404).json({ error: 'Message not found' })
+    if (!directMessage || directMessage.deleted) return res.status(404).json({ error: 'Message not found' })
 
-    const isMessageOwner = message.memberId === member.id
+    const isMessageOwner = directMessage.memberId === member.id
     const isAdmin = member.role === MemberRole.ADMIN
     const isModerator = member.role === MemberRole.MODERATOR
     const isAbleToModify = isMessageOwner || isAdmin || isModerator
@@ -73,9 +78,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
     if (!isAbleToModify) return res.status(401).json({ error: 'Unauthorized' })
 
     if (req.method === 'DELETE') {
-      message = await MessageModel.update({
+      directMessage = await DirectMessageModel.update({
         where: {
-          id: message.id,
+          id: directMessageId as string,
         },
         data: {
           fileUrl: null,
@@ -99,9 +104,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       if (!content) return res.status(400).json({ error: 'No content found' })
       if (!isMessageOwner) return res.status(401).json({ error: 'Unauthorized' })
 
-      message = await MessageModel.update({
+      directMessage = await DirectMessageModel.update({
         where: {
-          id: message.id,
+          id: directMessageId as string,
         },
         data: {
           content,
@@ -116,11 +121,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       })
     }
 
-    const updateKey = SOCKET_CHAT_KEYS.UPDATE('channel', channel.id)
+    const updateKey = SOCKET_CHAT_KEYS.UPDATE('conversation', conversation.id)
 
-    res?.socket?.server?.io?.emit(updateKey, message)
+    res?.socket?.server?.io?.emit(updateKey, directMessage)
 
-    return res.status(200).json(message)
+    return res.status(200).json(directMessage)
   }
   catch (err) {
     console.log('[MESSAGES_ID]', err)

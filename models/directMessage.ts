@@ -1,24 +1,24 @@
-import { Message } from '@prisma/client'
+import { DirectMessage } from '@prisma/client'
 import { IMember } from './member'
 import { db } from '@/lib/db'
 
-export interface IMessage extends Message {
+export interface IDirectMessage extends DirectMessage {
   member: IMember
 }
 
-const MessageModel = db.$extends({
+const DirectMessageModel = db.$extends({
   result: {
-    message: {
+    directMessage: {
       content: {
         needs: {
           content: true,
         },
-        compute (thisMessage: Message) {
+        compute (thisMessage: DirectMessage) {
           return !thisMessage.deleted ? thisMessage.content : 'This message has been deleted.'
         },
       }
     }
   }
-}).message
+}).directMessage
 
-export default MessageModel
+export default DirectMessageModel

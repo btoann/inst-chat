@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { GV } from '@/config/glob'
-import MessageModel from '@/models/message'
+import DirectMessageModel from '@/models/directMessage'
 import { currentProfile } from '@/lib/current-profile'
 
 const GET = async (req: Request) => {
@@ -11,11 +11,11 @@ const GET = async (req: Request) => {
     
     const { searchParams } = new URL(req.url)
     const cursor = searchParams.get('cursor')
-    const channelId = searchParams.get('channelId')
+    const conversationId = searchParams.get('conversationId')
 
-    if (!channelId) return new NextResponse('Channel ID missing', { status: 400 })
+    if (!conversationId) return new NextResponse('Conversation ID missing', { status: 400 })
 
-    const messages = await MessageModel.findMany({
+    const messages = await DirectMessageModel.findMany({
       take: GV.MESSAGES_PER_PAYLOAD,
       ...(cursor != null && {
         skip: 1,
@@ -24,7 +24,7 @@ const GET = async (req: Request) => {
         },
       }),
       where: {
-        channelId,
+        conversationId,
       },
       include: {
         member: {
@@ -46,7 +46,7 @@ const GET = async (req: Request) => {
     })
   }
   catch (err) {
-    console.log('[MESSAGES_GET]', err)
+    console.log('[DIRECT_MESSAGES_GET]', err)
     return new NextResponse('Internal Server Error', { status: 500 })
   }
 }

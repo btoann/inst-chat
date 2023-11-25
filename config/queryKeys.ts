@@ -20,6 +20,4 @@ export enum QUERY_KEYS {
 
   // CHAT KEYS
   CHAT = 'chat',
-  CREATE_CHAT = 'chat:messages',
-  UPDATE_CHAT = 'chat:messages:update',
 }

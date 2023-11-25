@@ -13,6 +13,8 @@ export type NextApiResponseServerIO = NextApiResponse & {
 
 export type IconMap<T extends string> = Partial<Record<T, ReactNode | null>>
 
+export type ChatMessagesType = 'channel' | 'conversation'
+
 // Global variables
 export class GV {
   static DATE_FORMAT = 'd MMM yyyy, HH:mm'

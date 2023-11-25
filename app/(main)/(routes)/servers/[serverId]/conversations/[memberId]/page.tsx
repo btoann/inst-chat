@@ -1,10 +1,10 @@
-import Conversation from '@/components/shared/Chat'
-import { getOrCreateConversation } from '@/lib/conversation'
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { redirectToSignIn } from '@clerk/nextjs'
-import { redirect } from 'next/navigation'
 import { FC } from 'react'
+import { redirect } from 'next/navigation'
+import { redirectToSignIn } from '@clerk/nextjs'
+import { db } from '@/lib/db'
+import { currentProfile } from '@/lib/current-profile'
+import { getOrCreateConversation } from '@/lib/conversation'
+import Chat from '@/components/shared/Chat'
 
 type TMemberIdPageProps = {
   params: {
@@ -43,11 +43,32 @@ const MemberIdPage: FC<TMemberIdPageProps> = async ({
 
   return (
     <div className={'h-full flex flex-col bg-white dark:bg-[#313338]'}>
-      <Conversation.Header
+      <Chat.Header
         type={'conversation'}
         serverId={params.serverId}
         name={otherMember.profile.name}
         imageUrl={otherMember.profile.imageUrl}
+      />
+      <Chat.Messages
+        type={'conversation'}
+        name={otherMember.profile.name}
+        member={currentMember}
+        chatId={conversation.id}
+        apiUrl={'/api/direct-messages'}
+        paramKey={'conversationId'}
+        paramValue={conversation.id}
+        socketUrl={'/api/socket/direct-messages'}
+        socketQuery={{
+          conversationId: conversation.id,
+        }}
+      />
+      <Chat.Input
+        type={'conversation'}
+        name={otherMember.profile.name}
+        apiUrl={'/api/socket/direct-messages'}
+        query={{
+          conversationId: conversation.id,
+        }}
       />
     </div>
   )

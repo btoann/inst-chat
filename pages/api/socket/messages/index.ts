@@ -1,5 +1,6 @@
 import { NextApiRequest } from 'next'
 import { NextApiResponseServerIO } from '@/config/glob'
+import { SOCKET_CHAT_KEYS } from '@/config/socketKeys'
 import ServerModel from '@/models/server'
 import ChannelModel from '@/models/channel'
 import MessageModel from '@/models/message'
@@ -41,7 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
     const channel = await ChannelModel.findFirst({
       where: {
         id: channelId as string,
-        serverId: serverId as string,
+        serverId: server.id,
       }
     })
 
@@ -55,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       data: {
         content,
         fileUrl,
-        channelId: channelId as string,
+        channelId: channel.id,
         memberId: member.id,
       },
       include: {
@@ -67,7 +68,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       }
     })
 
-    const channelKey = `chat:${channelId}:messages`
+    const channelKey = SOCKET_CHAT_KEYS.ADD('channel', channel.id)
 
     res?.socket?.server?.io?.emit(channelKey, message)
 

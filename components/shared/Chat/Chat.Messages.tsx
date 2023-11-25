@@ -1,25 +1,27 @@
 'use client'
 
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useRef, ElementRef } from 'react'
 import { Loader2, ServerCrash } from 'lucide-react'
 import { Member } from '@prisma/client'
+import { ChatMessagesType } from '@/config/glob'
+import { SOCKET_CHAT_KEYS } from '@/config/socketKeys'
 import { IMessage } from '@/models/message'
+import { useChatSocket } from '@/hooks/ChatSocket'
+import { useChatScroll } from '@/hooks/ChatScroll'
 import { useChatQuery } from '@/hooks/ChatQuery'
 import ChatWelcome from './Chat.Welcome'
 import ChatItem from './Chat.Item'
-import { GV } from '@/config/glob'
-import { useChatSocket } from '@/hooks/ChatSocket'
 
 type TChatMessagesProps = {
-  type: 'channel' | 'conversation'
+  type: ChatMessagesType
   name: string
   member: Member
   chatId: string
   apiUrl: string
-  socketUrl: string
-  socketQuery: Record<string, string>
   paramKey: 'channelId' | 'conversationId'
   paramValue: string
+  socketUrl: string
+  socketQuery: Record<string, string>
 }
 
 const ChatMessages: FC<TChatMessagesProps> = ({
@@ -28,11 +30,14 @@ const ChatMessages: FC<TChatMessagesProps> = ({
   member,
   chatId,
   apiUrl,
-  socketUrl,
-  socketQuery,
   paramKey,
   paramValue,
+  socketUrl,
+  socketQuery,
 }) => {
+
+  const chatRef = useRef<ElementRef<'div'>>(null)
+  const bottomRef = useRef<ElementRef<'div'>>(null)
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useChatQuery({
     chatId,
@@ -41,10 +46,16 @@ const ChatMessages: FC<TChatMessagesProps> = ({
     paramValue,
   })
 
-  const addKey = `chat:${chatId}:messages`
-  const updateKey = `chat:${chatId}:messages:update`
+  const addKey = SOCKET_CHAT_KEYS.ADD(type, chatId)
+  const updateKey = SOCKET_CHAT_KEYS.UPDATE(type, chatId)
 
   useChatSocket({ chatId, addKey, updateKey })
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchNextPage, shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0
+  })
 
   if (status === 'pending') return (
     <div className={'flex flex-1 flex-col justify-center items-center'}>
@@ -65,12 +76,35 @@ const ChatMessages: FC<TChatMessagesProps> = ({
   )
 
   return (
-    <div className={'py-4 flex flex-1 flex-col overflow-y-auto'}>
-      <div className={'flex-1'} />
-      <ChatWelcome
-        type={type}
-        name={name}
-      />
+    <div
+      ref={chatRef}
+      className={'py-4 flex flex-1 flex-col overflow-y-auto'}
+    >
+      {!hasNextPage && (
+        <>
+          <div className={'flex-1'} />
+          <ChatWelcome
+            type={type}
+            name={name}
+          />
+        </>
+      )}
+      {hasNextPage && (
+        <div className={'flex justify-center'}>
+          {
+            isFetchingNextPage
+              ? <Loader2 className={'h-6 w-6 my-4 text-zinc-500 animate-spin'} />
+              : (
+                <button
+                  className={'my-4 text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition'}
+                  onClick={() => fetchNextPage()}
+                >
+                  Load previous messages
+                </button>
+              )
+          }
+        </div>
+      )}
       <div className={'mt-auto flex flex-col-reverse'}>
         {data?.pages?.map((group, index) => (
           <Fragment key={index}>
@@ -93,6 +127,7 @@ const ChatMessages: FC<TChatMessagesProps> = ({
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   )
 }

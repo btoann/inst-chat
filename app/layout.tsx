@@ -29,7 +29,7 @@ const RootLayout: FC<TRootLayoutProps> = ({ children }) => {
       >
         <body
           className={cn(
-            font.className,
+            // font.className,
             'bg-white dark:bg-[#313338]'
           )}
         >
