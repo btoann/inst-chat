@@ -3,6 +3,7 @@ import { Hash } from 'lucide-react'
 import MobileToggle from '@/components/shared/MobileToggle'
 import UserAvatar from '@/components/shared/UserAvatar'
 import SocketIndicator from '@/components/shared/SocketIndicator'
+import ChatVideoTrigger from './Chat.VideoTrigger'
 
 type TChatHeaderProps = {
   type: 'channel' | 'conversation'
@@ -30,6 +31,9 @@ const ChatHeader: FC<TChatHeaderProps> = ({
         {name}
       </p>
       <div className={'ml-auto flex items-center'}>
+        {type === 'conversation' && (
+          <ChatVideoTrigger />
+        )}
         <SocketIndicator />
       </div>
     </div>
